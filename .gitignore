@@ -1,0 +1,22 @@
+# Dossiers de build
+BUILD/
+*/BUILD/
+OBJ/
+*/OBJ/
+**/OBJ/
+roadmap.txt
+
+# Fichiers objets et binaires
+*.o
+*.elf
+*.cdi
+*.bin
+
+# Fichiers temporaires
+*.img
+*.tmp
+*~
+
+# Fichiers systèmes
+.DS_Store
+Thumbs.db

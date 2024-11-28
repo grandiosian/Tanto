@@ -1,0 +1,66 @@
+# Forcer l'utilisation de KOS-CC
+CC = /opt/toolchains/dc/kos/utils/build_wrappers/kos-cc
+
+# Dossiers du projet
+TANTO_ENGINE_DIR  = ../../TANTO
+SCRIPTS_DIR       = ../../SCRIPTS
+BUILD_DIR         = ../../BUILD/$(notdir $(CURDIR))
+OBJ_DIR          = OBJ
+
+# Paramètres de compilation KOS
+CFLAGS += $(KOS_CFLAGS) -I../.. -I$(TANTO_ENGINE_DIR)
+LDFLAGS = -L$(KOS_BASE)/lib -L$(KOS_BASE)/../kos-ports/lib -Wl,-rpath=$(KOS_BASE)/lib
+
+# Cibles de compilation
+ELF = $(BUILD_DIR)/$(notdir $(CURDIR)).elf
+CDI = $(BUILD_DIR)/$(notdir $(CURDIR)).cdi
+OBJS = $(OBJ_DIR)/main.o
+
+.PHONY: all clean force
+
+# Règle principale
+all: force $(CDI) copyScripts
+
+elf: force $(ELF) copyScripts
+
+copyScripts:
+	cp -r $(SCRIPTS_DIR)/* $(BUILD_DIR)/; \
+
+# Force la recompilation
+force:
+	@echo "Checking source files..."
+	@if [ ! -f main.c ]; then \
+		echo "Error: main.c not found"; \
+		exit 1; \
+	fi
+	mkdir -p $(BUILD_DIR)
+	mkdir -p $(OBJ_DIR)
+
+# Génération du CDI
+$(CDI): $(ELF)
+	@echo "Creating CDI..."
+	cd $(BUILD_DIR) && $(SCRIPTS_DIR)/makeCdiAndRun.sh ./$(notdir $(ELF))
+
+# Génération du ELF
+$(ELF): $(OBJS)
+	@echo "Linking..."
+	$(CC) -o $@ $(OBJS) $(LDFLAGS)
+
+# Compilation des fichiers objets
+$(OBJ_DIR)/main.o: main.c
+	@echo "Compiling main.c..."
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Nettoyage
+clean:
+	rm -f $(OBJS)
+	rm -rf $(BUILD_DIR)
+	rm -rf $(OBJ_DIR)
+
+# Debug
+debug:
+	@echo "Current directory: $$(pwd)"
+	@echo "Files in current directory:"
+	@ls -la
+	@echo "BUILD_DIR: $(BUILD_DIR)"
+	@echo "OBJS: $(OBJS)"
