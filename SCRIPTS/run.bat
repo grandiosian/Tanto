@@ -1,0 +1,1 @@
+dreamsdk-runner "makeCdiAndRun.sh"
