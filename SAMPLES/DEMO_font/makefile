@@ -12,7 +12,7 @@ OBJ_DIR          = OBJ
 
 # Paramètres de compilation KOS
 CFLAGS += $(KOS_CFLAGS) -I../.. -I$(TANTO_ENGINE_DIR)
-LDFLAGS = -L$(KOS_BASE)/lib -L$(KOS_BASE)/../kos-ports/lib -Wl,-rpath=$(KOS_BASE)/lib 
+LDFLAGS = -L$(KOS_BASE)/lib -L$(KOS_BASE)/../kos-ports/lib -Wl,-rpath=$(KOS_BASE)/lib -lkmg
 
 # Cibles de compilation
 ELF = $(BUILD_DIR)/$(notdir $(CURDIR)).elf
@@ -71,6 +71,7 @@ $(ELF): $(OBJ_DIR)/main.o $(TANTO_OBJS)
 	@echo "Linking..."
 	$(CC) -o $@ $(OBJS) $(LDFLAGS)
 	cd $(BUILD_DIR) && $(SCRIPTS_DIR)/makeCdi.sh ./$(notdir $(ELF))
+
 
 $(OBJ_DIR)/main.o: main.c
 	@echo "Compiling main.c..."

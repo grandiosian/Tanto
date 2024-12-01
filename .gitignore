@@ -1,10 +1,13 @@
 # Dossiers de build
 BUILD/
 */BUILD/
+SCRIPTS/KRITA/logoScripts
+RESOURCES/TEXTURES/*
 OBJ/
 */OBJ/
 **/OBJ/
 roadmap.txt
+
 
 # Fichiers objets et binaires
 *.o

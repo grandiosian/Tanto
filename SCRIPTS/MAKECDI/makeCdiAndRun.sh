@@ -1,7 +1,14 @@
 #!/bin/sh
 chmod 744 makeCdiAndRun.sh
 
+
 flycast_path="C:/Users/lione/Desktop/RESSOURCES/EMULATEURS/DREAMCAST/flycast-win64-2.2/flycast.exe"
+
+
+
+
+
+
 repertoire_courant=$(pwd)
 # Liste des fichiers avec l'extension .elf dans le dossier courant
 files_with_extension=$(ls *.elf 2>/dev/null)

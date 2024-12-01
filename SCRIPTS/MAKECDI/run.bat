@@ -1,0 +1,1 @@
+dreamsdk-runner "RunOnEmulator.sh"

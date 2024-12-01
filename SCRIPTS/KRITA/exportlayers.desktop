@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=exportlayers
+X-Python-2-Compatible=false
+Name=Export Layers Docker
+Comment=Docker for exporting layers with different resolutions
+Icon=exportlayers.png

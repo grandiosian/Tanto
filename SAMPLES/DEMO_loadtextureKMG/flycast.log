@@ -1,0 +1,42 @@
+00:00:000 rend/dx11/dx11context.cpp:42 N[RENDERER]: DX11 Context initializing
+00:00:018 sdl/sdl.cpp:625 N[RENDERER]: Monitor refresh rate: 60 Hz (1920 x 1200)
+00:00:093 rend/dx11/dx11context.cpp:178 N[RENDERER]: No system-provided shader cache
+00:00:094 rend/gui.cpp:297 N[RENDERER]: Screen DPI is 120, size 1045 x 940. Scaling by 1.00
+00:00:095 rend/dx11/dx11context.cpp:341 N[RENDERER]: Swapchain resized: 1045 x 940
+00:00:095 rend/dx11/dx11_shaders.cpp:720 N[RENDERER]: Loaded 56 shaders from c:\Users\lione\Desktop\RESSOURCES\EMULATEURS\DREAMCAST\flycast-win64-2.2\data\dx11_shader_cache.bin
+00:00:127 rend/dx11/dx11_renderer.cpp:44 N[RENDERER]: DX11 renderer initializing
+00:00:133 hw/mem/addrspace.cpp:431 N[VMEM]: Info: nvmem is enabled
+00:00:156 hw/mem/addrspace.cpp:462 N[VMEM]: BASE 00007ff4494e0000 RAM(16 MB) 00007ff4554e0000 VRAM64(8 MB) 00007ff44d4e0000 ARAM(2 MB) 00007ff4694e0000
+00:00:179 rend/gui.cpp:2951 E[BOOT]: Cannot get attributes of c:/Users/lione/Desktop/PROD_LOCAL/DEV_HOMEBREW/DEV_CONSOLES/DREAMCAST/TANTO_ENGINE/SAMPLES/DEMO_loadtextureKMG/.cdi
+00:00:179 rend/gui.cpp:539 E[COMMON]: Flycast has stopped: Cannot get attributes of c:/Users/lione/Desktop/PROD_LOCAL/DEV_HOMEBREW/DEV_CONSOLES/DREAMCAST/TANTO_ENGINE/SAMPLES/DEMO_loadtextureKMG/.cdi
+00:00:198 rend/dx11/dx11_renderer.cpp:175 N[RENDERER]: DX11 renderer terminating
+00:00:201 rend/dx11/dx11context.cpp:208 N[RENDERER]: DX11 Context terminating
+00:00:202 rend/dx11/dx11_shaders.cpp:694 N[RENDERER]: Saved 56 shaders to c:\Users\lione\Desktop\RESSOURCES\EMULATEURS\DREAMCAST\flycast-win64-2.2\data\dx11_shader_cache.bin
+00:00:000 rend/dx11/dx11context.cpp:42 N[RENDERER]: DX11 Context initializing
+00:00:031 sdl/sdl.cpp:625 N[RENDERER]: Monitor refresh rate: 60 Hz (1920 x 1200)
+00:00:113 rend/dx11/dx11context.cpp:178 N[RENDERER]: No system-provided shader cache
+00:00:114 rend/gui.cpp:297 N[RENDERER]: Screen DPI is 120, size 1045 x 940. Scaling by 1.00
+00:00:116 rend/dx11/dx11context.cpp:341 N[RENDERER]: Swapchain resized: 1045 x 940
+00:00:116 rend/dx11/dx11_shaders.cpp:720 N[RENDERER]: Loaded 56 shaders from c:\Users\lione\Desktop\RESSOURCES\EMULATEURS\DREAMCAST\flycast-win64-2.2\data\dx11_shader_cache.bin
+00:00:151 rend/dx11/dx11_renderer.cpp:44 N[RENDERER]: DX11 renderer initializing
+00:00:159 hw/mem/addrspace.cpp:431 N[VMEM]: Info: nvmem is enabled
+00:00:173 hw/mem/addrspace.cpp:462 N[VMEM]: BASE 00007ff48e7b0000 RAM(16 MB) 00007ff49a7b0000 VRAM64(8 MB) 00007ff4927b0000 ARAM(2 MB) 00007ff4ae7b0000
+00:00:198 rend/gui.cpp:2951 E[BOOT]: Cannot get attributes of c:/Users/lione/Desktop/PROD_LOCAL/DEV_HOMEBREW/DEV_CONSOLES/DREAMCAST/TANTO_ENGINE/SAMPLES/DEMO_loadtextureKMG/.cdi
+00:00:198 rend/gui.cpp:539 E[COMMON]: Flycast has stopped: Cannot get attributes of c:/Users/lione/Desktop/PROD_LOCAL/DEV_HOMEBREW/DEV_CONSOLES/DREAMCAST/TANTO_ENGINE/SAMPLES/DEMO_loadtextureKMG/.cdi
+00:00:233 rend/dx11/dx11_renderer.cpp:175 N[RENDERER]: DX11 renderer terminating
+00:00:236 rend/dx11/dx11context.cpp:208 N[RENDERER]: DX11 Context terminating
+00:00:237 rend/dx11/dx11_shaders.cpp:694 N[RENDERER]: Saved 56 shaders to c:\Users\lione\Desktop\RESSOURCES\EMULATEURS\DREAMCAST\flycast-win64-2.2\data\dx11_shader_cache.bin
+00:00:000 rend/dx11/dx11context.cpp:42 N[RENDERER]: DX11 Context initializing
+00:00:019 sdl/sdl.cpp:625 N[RENDERER]: Monitor refresh rate: 60 Hz (1920 x 1200)
+00:00:100 rend/dx11/dx11context.cpp:178 N[RENDERER]: No system-provided shader cache
+00:00:102 rend/gui.cpp:297 N[RENDERER]: Screen DPI is 120, size 1045 x 940. Scaling by 1.00
+00:00:103 rend/dx11/dx11context.cpp:341 N[RENDERER]: Swapchain resized: 1045 x 940
+00:00:104 rend/dx11/dx11_shaders.cpp:720 N[RENDERER]: Loaded 56 shaders from c:\Users\lione\Desktop\RESSOURCES\EMULATEURS\DREAMCAST\flycast-win64-2.2\data\dx11_shader_cache.bin
+00:00:134 rend/dx11/dx11_renderer.cpp:44 N[RENDERER]: DX11 renderer initializing
+00:00:140 hw/mem/addrspace.cpp:431 N[VMEM]: Info: nvmem is enabled
+00:00:156 hw/mem/addrspace.cpp:462 N[VMEM]: BASE 00007ff453560000 RAM(16 MB) 00007ff45f560000 VRAM64(8 MB) 00007ff457560000 ARAM(2 MB) 00007ff473560000
+00:00:180 rend/gui.cpp:2951 E[BOOT]: Cannot get attributes of c:/Users/lione/Desktop/PROD_LOCAL/DEV_HOMEBREW/DEV_CONSOLES/DREAMCAST/TANTO_ENGINE/SAMPLES/DEMO_loadtextureKMG/.cdi
+00:00:180 rend/gui.cpp:539 E[COMMON]: Flycast has stopped: Cannot get attributes of c:/Users/lione/Desktop/PROD_LOCAL/DEV_HOMEBREW/DEV_CONSOLES/DREAMCAST/TANTO_ENGINE/SAMPLES/DEMO_loadtextureKMG/.cdi
+00:00:212 rend/dx11/dx11_renderer.cpp:175 N[RENDERER]: DX11 renderer terminating
+00:00:215 rend/dx11/dx11context.cpp:208 N[RENDERER]: DX11 Context terminating
+00:00:216 rend/dx11/dx11_shaders.cpp:694 N[RENDERER]: Saved 56 shaders to c:\Users\lione\Desktop\RESSOURCES\EMULATEURS\DREAMCAST\flycast-win64-2.2\data\dx11_shader_cache.bin
