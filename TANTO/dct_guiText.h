@@ -63,10 +63,6 @@ typedef struct {
     int depth;
 } ColorStack;
 
-//typedef struct TextAnimation TextAnimation;
-//typedef struct TextElement TextElement;
-//typedef struct TextSequence TextSequence;
-
 // Fonctions de gestion du texte et des animations
 TextAnimation* dct_init_text_animation(const char* text, float chars_per_second);
 TextSequence* dct_init_text_sequence(const char** texts, int count, float chars_per_second);

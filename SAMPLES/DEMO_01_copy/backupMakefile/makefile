@@ -1,10 +1,7 @@
-
 # Forcer l'utilisation de KOS-CC
 CC = /opt/toolchains/dc/kos/utils/build_wrappers/kos-cc
 
 # Dossiers du projet
-SRC_DIR = ../../TANTO
-
 TANTO_ENGINE_DIR  = ../../TANTO
 SCRIPTS_DIR       = ../../SCRIPTS/MAKECDI
 BUILD_DIR         = ../../BUILD/$(notdir $(CURDIR))
@@ -17,16 +14,7 @@ LDFLAGS = -L$(KOS_BASE)/lib -L$(KOS_BASE)/../kos-ports/lib -Wl,-rpath=$(KOS_BASE
 # Cibles de compilation
 ELF = $(BUILD_DIR)/$(notdir $(CURDIR)).elf
 CDI = $(BUILD_DIR)/$(notdir $(CURDIR)).cdi
-
-TANTO_SRCS = $(wildcard $(TANTO_ENGINE_DIR)/*.c)
-TANTO_OBJS = $(patsubst $(TANTO_ENGINE_DIR)/%.c,$(OBJ_DIR)/%.o,$(TANTO_SRCS))
-
-OBJS = $(OBJ_DIR)/main.o $(TANTO_OBJS)
-
-# Au début du fichier, après la définition des variables
-$(info TANTO_SRCS = $(TANTO_SRCS))
-$(info TANTO_OBJS = $(TANTO_OBJS))
-$(info OBJS = $(OBJS))
+OBJS = $(OBJ_DIR)/main.o
 
 .PHONY: all clean force $(OBJS)
 
@@ -61,18 +49,18 @@ force:
 
 # Génération du CDI
 $(CDI): $(ELF)
-	@echo "Creating CDI..."
+	@echo "Creating CDI...and RUN"
 	cd $(BUILD_DIR) && $(SCRIPTS_DIR)/RunOnEmulator.sh ./$(notdir $(ELF))
 
+
 # Génération du ELF
-$(ELF): $(OBJ_DIR)/main.o $(TANTO_OBJS)
-	@echo "Compiling TANTO files..."
-	$(foreach src,$(TANTO_SRCS),$(CC) $(CFLAGS) -c $(src) -o $(OBJ_DIR)/$(notdir $(src:.c=.o));)
+$(ELF): $(OBJS)
 	@echo "Linking..."
 	$(CC) -o $@ $(OBJS) $(LDFLAGS)
 	cd $(BUILD_DIR) && $(SCRIPTS_DIR)/makeCdi.sh ./$(notdir $(ELF))
 
-$(OBJ_DIR)/main.o: main.c
+# Compilation des fichiers objets
+$(OBJS): main.c
 	@echo "Compiling main.c..."
 	$(CC) $(CFLAGS) -c $< -o $@
 

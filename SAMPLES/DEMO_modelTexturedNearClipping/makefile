@@ -12,7 +12,8 @@ OBJ_DIR          = OBJ
 
 # Paramètres de compilation KOS
 CFLAGS += $(KOS_CFLAGS) -I../.. -I$(TANTO_ENGINE_DIR)
-LDFLAGS = -L$(KOS_BASE)/lib -L$(KOS_BASE)/../kos-ports/lib -Wl,-rpath=$(KOS_BASE)/lib 
+CFLAGS += -fdiagnostics-color=always
+LDFLAGS = -L$(KOS_BASE)/lib -L$(KOS_BASE)/../kos-ports/lib -Wl,-rpath=$(KOS_BASE)/lib -lkmg
 
 # Cibles de compilation
 ELF = $(BUILD_DIR)/$(notdir $(CURDIR)).elf
@@ -59,6 +60,10 @@ force:
 		cp -r cd_root/* $(BUILD_DIR)/cd_root/; \
 	fi
 
+$(OBJ_DIR)/dct_model.o: $(TANTO_ENGINE_DIR)/dct_model.c
+	@echo "Specifically compiling dct_model.c..."
+	$(CC) $(CFLAGS) -c $< -o $@ || (echo "Failed to compile dct_model.c" && exit 1)
+	
 # Génération du CDI
 $(CDI): $(ELF)
 	@echo "Creating CDI..."
