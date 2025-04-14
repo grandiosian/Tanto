@@ -21,21 +21,13 @@ TANTO est un framework de développement pour la console Sega Dreamcast, constru
 ## Exemples 
 
  - Demo Basic Texture KMG 
- ![Demo Basic Texture KMG ](WIKI/demoBasicTextureKMG.gif)
  - Demo 3d Basic flat shapes
- ![Demo 3d Basic flat shapes ](WIKI/demo3dFlatShapes.gif)
  - Demo 3d Base Geometry
- ![Demo 3d Base Geometry ](WIKI/demo3dBasicGeometry.gif)
  - Demo 3d cube with 3d volume modifier filtering 2 textures
- ![Demo 3d cube with 3d volume modifier filtering 2 textures ](WIKI/demo3dVolumeModifierTexture.gif)
  - Demo 3d cube with 3d volume modifier filtering 2 set of Vertex Color
- ![Demo 3d cube with 3d volume modifier filtering 2 set of Vertex Color ](WIKI/demo3dVolumeModifierVertexColor.gif)
  - Demo gui animated Text
- ![Demo gui animated Text ](WIKI/demoGUIAnimated.gif)
  - Demo 3d model with animations exported from Blender using exporter 
- ![Demo gui animated Text ](WIKI/demo3dModelsSkinned.gif)
  - Demo tiny debugger
- ![Demo tiny debugger ](WIKI/demoTinyDebugger.gif)
 
  <p align="center">
   <img src="WIKI/demoBasicTextureKMG.gif" width="200" />
@@ -54,7 +46,7 @@ TANTO est un framework de développement pour la console Sega Dreamcast, constru
 
 - KallistiOS (KOS) v2.0+
 - Compilateur kos-cc
-- Bibliothèques additionnelles pour son et vidéo (requis ultérieurement)
+- Bibliothèques additionnelles KMG pour les fichier convertit au format kmg.
 
 ## Installation & Configuration
 
@@ -64,7 +56,7 @@ TANTO est un framework de développement pour la console Sega Dreamcast, constru
 ### Linux/macOS
 - Suivre le guide d'installation sur https://github.com/KallistiOS/KallistiOS
 
-Configurer le chemin de l'émulateur dans `SCRIPTS/makeCdiAndRun.sh`:
+Configurer le chemin de l'émulateur dans `SCRIPTS/MAKECDI/makeCdiAndRun.sh`:
 ```bash
 flycast_path="chemin/vers/votre/emulateur/dreamcast"
 ```
@@ -77,7 +69,11 @@ flycast_path="chemin/vers/votre/emulateur/dreamcast"
    - Windows avec DreamSDK : `run.bat`
    - Linux/macOS/WSL : `makeCdiAndRun.sh`
 
-Compilation rapide : Exécuter `make` dans n'importe quel dossier de projet pour une compilation et un lancement automatique.
+Compilation de l'ensemble : Executer simplement `make` à la racine /TANTO_ENGINE
+
+Compilation rapide : Exécuter `make clean`  puis `make` dans n'importe quel dossier de projet pour une compilation et un lancement automatique.
+
+Si la démo a déja été compilé, exécuter `make run` pour éviter de recompiler le projet et juste lancer le programme dans l'emulateur (flycast de préférence)
 
 ## Résolution des problèmes
 
