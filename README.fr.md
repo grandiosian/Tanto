@@ -37,6 +37,19 @@ TANTO est un framework de développement pour la console Sega Dreamcast, constru
  - Demo tiny debugger
  ![Demo tiny debugger ](WIKI/demoTinyDebugger.gif)
 
+ <p align="center">
+  <img src="WIKI/demoBasicTextureKMG.gif" width="200" />
+  <img src="WIKI/demo3dFlatShapes.gif" width="200" /> 
+  <img src="WIKI/demo3dBasicGeometry.gif" width="200" />
+
+  <img src="WIKI/demo3dVolumeModifierTexture.gif" width="200" />
+  <img src="WIKI/demo3dVolumeModifierVertexColor.gif" width="200" />
+  <img src="WIKI/demoGUIAnimated.gif" width="200" />
+
+  <img src="WIKI/demo3dModelsSkinned.gif" width="200" />
+  <img src="WIKI/demoTinyDebugger.gif" width="200" />
+</p>
+
 ## Prérequis
 
 - KallistiOS (KOS) v2.0+
