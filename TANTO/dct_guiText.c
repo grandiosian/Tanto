@@ -166,7 +166,7 @@ BitmapFont* dct_init_font(const char* base_path, const char* fnt_file) {
     printf("\ndct init font \n");
     BitmapFont* font = malloc(sizeof(BitmapFont));
     if (!font) return NULL;
-
+    printf("\nbefore fopen\n");
     FILE* fnt = fopen(fnt_file, "r");
     if (!fnt) {
         free(font);

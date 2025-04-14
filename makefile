@@ -16,6 +16,7 @@ build_samples:
 			echo "Compilation de $$dir"; \
 			$(MAKE) -C "$$dir" clean; \
 			$(MAKE) -C "$$dir" elf; \
+			$(MAKE) -C "$$dir" generate; \
 		fi \
 	done
 

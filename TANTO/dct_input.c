@@ -16,7 +16,7 @@ int dct_input_init(void) {
     return (cont != NULL);
 }
 
-int dct_input_update(int port, DCT_ControllerState* state) {
+int dct_input_update(int port, dct_controllerState_t* state) {
     if (!state || port < 0 || port > 3) {
         return 0;
     }

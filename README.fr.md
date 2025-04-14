@@ -2,6 +2,7 @@
 
 TANTO est un framework de développement pour la console Sega Dreamcast, construit sur KallistiOS (KOS) - un système de développement libre et open-source.
 
+
 ## Structure du Projet
 
 ```
@@ -12,9 +13,29 @@ TANTO est un framework de développement pour la console Sega Dreamcast, constru
 ├── SAMPLES/        # Exemples de projets
 │   └── DEMO_XX/    # Projets de démo
 └── SCRIPTS/        # Scripts utilitaires
-    ├── makeCdiAndRun.sh    # Script de compilation et lancement
-    └── run.bat            # Lanceur Windows
+    ├── BLENDER             # Script de exportation format PVR pour les models3d avec animation
+    ├── MAKECDI             # Script de compilation et de lancement
+    ├── KRITA               # Scrips d'export layers
 ```
+
+## Exemples 
+
+ - Demo Basic Texture KMG 
+ ![Demo Basic Texture KMG ](WIKI/demoBasicTextureKMG.gif)
+ - Demo 3d Basic flat shapes
+ ![Demo 3d Basic flat shapes ](WIKI/demo3dFlatShapes.gif)
+ - Demo 3d Base Geometry
+ ![Demo 3d Base Geometry ](WIKI/demo3dBasicGeometry.gif)
+ - Demo 3d cube with 3d volume modifier filtering 2 textures
+ ![Demo 3d cube with 3d volume modifier filtering 2 textures ](WIKI/demo3dVolumeModifierTexture.gif)
+ - Demo 3d cube with 3d volume modifier filtering 2 set of Vertex Color
+ ![Demo 3d cube with 3d volume modifier filtering 2 set of Vertex Color ](WIKI/demo3dVolumeModifierVertexColor.gif)
+ - Demo gui animated Text
+ ![Demo gui animated Text ](WIKI/demoGUIAnimated.gif)
+ - Demo 3d model with animations exported from Blender using exporter 
+ ![Demo gui animated Text ](WIKI/demo3dModelsSkinned.gif)
+ - Demo tiny debugger
+ ![Demo tiny debugger ](WIKI/demoTinyDebugger.gif)
 
 ## Prérequis
 
@@ -25,8 +46,7 @@ TANTO est un framework de développement pour la console Sega Dreamcast, constru
 ## Installation & Configuration
 
 ### Windows
-- Recommandé : Installer DreamSDK depuis https://github.com/dreamsdk
-- Alternative : Utiliser WSL
+- Recommandé : Utiliser wsl et une installation kos linux https://github.com/KallistiOS/KallistiOS ou  Installer DreamSDK depuis https://github.com/dreamsdk
 
 ### Linux/macOS
 - Suivre le guide d'installation sur https://github.com/KallistiOS/KallistiOS

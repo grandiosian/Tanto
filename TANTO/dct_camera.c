@@ -1,6 +1,6 @@
 #include "dct_camera.h"
 
-static dct_camera currentCamera = {
+static dct_camera_t currentCamera = {
     .transform[0][0] = 1.0f,
     .transform[0][1] = 0.0f,
     .transform[0][2] = 0.0f,
@@ -26,6 +26,10 @@ static dct_camera currentCamera = {
     .position.z = 0.0f,
     .position.w = 0.0f,
 
+    .rotation.x = 0.0f,
+    .rotation.y = 0.0f,
+    .rotation.z = 0.0f,
+
     .offsetCenterScreen[0] = 640.0f/2.0f,
     .offsetCenterScreen[1] = 480.0f/2.0f,
 
@@ -38,8 +42,8 @@ static dct_camera currentCamera = {
     .target.y = 0.0f,
     .target.z = 0.0f,
     .target.w = 0.0f,
-
-    .fovDeg = 60.0f,
+    .viewAngle = 90.0f,
+    .fovDeg = 90.0/2.0f,
     .fovRad = 0.0f,
     .cot    = 0.0f,
     .znear = 0.01f,
@@ -48,113 +52,122 @@ static dct_camera currentCamera = {
     };
 
 
-dct_camera* getCurrentCamera()
+dct_camera_t* getCurrentCamera()
 {
     return &currentCamera;
 }
 
-void initDefaultCurrentCamera()
+
+void initDefaultCurrentCamera(dct_camera_t *cam)
 {
-    currentCamera.transform[0][0] = 1.0f;
-    currentCamera.transform[0][1] = 0.0f;
-    currentCamera.transform[0][2] = 0.0f;
-    currentCamera.transform[0][3] = 0.0f;
+    cam->transform[0][0] = 1.0f;
+    cam->transform[0][1] = 0.0f;
+    cam->transform[0][2] = 0.0f;
+    cam->transform[0][3] = 0.0f;
 
-    currentCamera.transform[1][0] = 0.0f;
-    currentCamera.transform[1][1] = 1.0f;
-    currentCamera.transform[1][2] = 0.0f;
-    currentCamera.transform[1][3] = 0.0f;
+    cam->transform[1][0] = 0.0f;
+    cam->transform[1][1] = 1.0f;
+    cam->transform[1][2] = 0.0f;
+    cam->transform[1][3] = 0.0f;
 
-    currentCamera.transform[2][0] = 0.0f;
-    currentCamera.transform[2][1] = 0.0f;
-    currentCamera.transform[2][2] = 1.0f;
-    currentCamera.transform[2][3] = 0.0f;
+    cam->transform[2][0] = 0.0f;
+    cam->transform[2][1] = 0.0f;
+    cam->transform[2][2] = 1.0f;
+    cam->transform[2][3] = 0.0f;
 
-    currentCamera.transform[3][0] = 0.0f;
-    currentCamera.transform[3][1] = 0.0f;
-    currentCamera.transform[3][2] = 0.0f;
-    currentCamera.transform[3][3] = 1.0f;
+    cam->transform[3][0] = 0.0f;
+    cam->transform[3][1] = 0.0f;
+    cam->transform[3][2] = 0.0f;
+    cam->transform[3][3] = 1.0f;
 
-    currentCamera.position.x = 0.0f;
-    currentCamera.position.y = 0.0f;
-    currentCamera.position.z = 0.0f;
+    cam->position.x = 0.0f;
+    cam->position.y = 0.0f;
+    cam->position.z = 0.0f;
 
-    currentCamera.target.x = 0.0f;
-    currentCamera.target.y = 0.0f;
-    currentCamera.target.z = 0.0f;
+    cam->target.x = 0.0f;
+    cam->target.y = 0.0f;
+    cam->target.z = 0.0f;
 
-    currentCamera.up.x = 0.0f;
-    currentCamera.up.y = 1.0f;
-    currentCamera.up.z = 0.0f;
+    cam->up.x = 0.0f;
+    cam->up.y = 1.0f;
+    cam->up.z = 0.0f;
 
-    currentCamera.fovDeg = 45.0f;
-    setCurrentCameraFOV(currentCamera.fovDeg);
-    currentCamera.znear = 0.01f;
-    currentCamera.zfar = 1000.0f;
+    cam->viewAngle = 60.0f;
+    setCurrentCameraFOV(cam,cam->fovDeg);
+    cam->znear = 0.01f;
+    cam->zfar = 1000.0f;
 
-}
-
-void setMatrixViewCurrentCamera()
-{
-
+    updateCurrentCamera(cam);
 }
 
 
-void setCurrentCameraPosition(float x, float y, float z)
+
+void setCurrentCameraPosition(dct_camera_t *cam, float x, float y, float z)
 {
-    currentCamera.position.x = x;
-    currentCamera.position.y = y;
-    currentCamera.position.z = z;
+    cam->position.x = x;
+    cam->position.y = y;
+    cam->position.z = z;
+    updateCurrentCamera(cam);
 }
 
 
-void setCurrentCameraTarget(float x, float y, float z)
+void setCurrentCameraTarget(dct_camera_t *cam,float x, float y, float z)
 {
-    currentCamera.target.x = x;
-    currentCamera.target.y = y;
-    currentCamera.target.z = z;
+    cam->target.x = x;
+    cam->target.y = y;
+    cam->target.z = z;
+    updateCurrentCamera(cam);
 }
 
-void setCurrentCameraUp(float x, float y, float z)
+void setCurrentCameraUp(dct_camera_t *cam,float x, float y, float z)
 {
-    currentCamera.target.x = x;
-    currentCamera.target.y = y;
-    currentCamera.target.z = z;
+    cam->target.x = x;
+    cam->target.y = y;
+    cam->target.z = z;
+    updateCurrentCamera(cam);
 }
 
-void setCurrentCameraFOV(float fov)
+void setCurrentCameraFOV(dct_camera_t *cam, float viewAngle)
 {
-    
-    currentCamera.fovDeg = fov;
-    currentCamera.fovRad = F_PI/180.0f * currentCamera.fovDeg;
-    currentCamera.cot    = 1.0f / dct_tan( currentCamera.fovRad ); 
-    printf("\nset current camera fov cot:%f\n",currentCamera.cot);
+    printf(BLEU_START_FN"\n\n{ >>> START >>> [SET-CURRENTCAMERA-FOV]\n"BLEU_INSIDE_FN); 
+    //cam->viewAngle = viewAngle/2.0f;
+    cam->fovDeg = cam->viewAngle;
+    cam->fovRad = 3.14159265f/180.0f * cam->fovDeg;
+    cam->cot    = 1.0f / tan( cam->fovRad/2 ); 
+    updateCurrentCamera(cam);
+    printf("\nset current camera fov cot:%f viewAngle :%f \n",cam->cot,cam->viewAngle);
+
+    printf(BLEU_END_FN"\n\n  [SET-CURRENTCAMERA-FOV] <<< END <<< }\n"ANSI_COLOR_RESET);
 }
 
-void updateCurrentCamera()
+void updateCurrentCamera(dct_camera_t *cam)
 {
-
+    mat_identity();
+    mat_perspective(cam->offsetCenterScreen[0], cam->offsetCenterScreen[1], cam->cot, cam->znear, cam->zfar);
+    mat_store(&cam->view);
 
     mat_identity();
-    //mat_perspective(currentCamera.offsetCenterScreen[0], currentCamera.offsetCenterScreen[1], currentCamera.cot, currentCamera.znear, currentCamera.zfar);
-    //mat_lookat(&currentCamera.position, &currentCamera.target,&currentCamera.up);
-    mat_translate(currentCamera.position.x, currentCamera.position.y, currentCamera.position.z);
-    mat_store(&currentCamera.transform);
+    mat_translate(cam->position.x, cam->position.y, cam->position.z);
+    mat_rotate(cam->rotation.x, cam->rotation.y, cam->rotation.z);
+    //mat_lookat(&cam->position, &cam->target,&cam->up);
+    mat_store(&cam->transform);
 
-
-
+    mat_identity();
+    mat_apply(cam->view);
+    mat_apply(cam->transform);
+    mat_store(&cam->final);
 }
 
 
-void debugCurrentCamera()
+void debugCurrentCamera(dct_camera_t *cam)
 {
-    printf("\n{ START >>> [DEBUG CURRENT-CAMERA] \n");
+    printf(BLEU_START_FN"\n{ >>> START >>> [DEBUG CURRENT-CAMERA] \n");
     printf("mat transform : \n");
-    print_matrix(&currentCamera.transform);
-    printf("position : x%f y%f z%f w%f\n", currentCamera.position.x, currentCamera.position.y,currentCamera.position.z,currentCamera.position.w);
-    printf("offsetCenter : x%f y%f \n", currentCamera.offsetCenterScreen[0], currentCamera.offsetCenterScreen[1]);
-    printf("up : x%f y%f z%f w%f \n", currentCamera.up.x,currentCamera.up.y,currentCamera.up.z,currentCamera.up.w );
-    printf("target : x%f y%f z%f w%f \n", currentCamera.target.x,currentCamera.target.y,currentCamera.target.z,currentCamera.target.w );
-    printf("fovDeg :%f fovRad: %f cot: %f znear:%f zfar:%f \n",currentCamera.fovDeg,currentCamera.fovRad,currentCamera.cot,currentCamera.znear,currentCamera.zfar);
+    print_matrix(&cam->transform);
+    printf("position : x%f y%f z%f w%f\n", cam->position.x, cam->position.y,cam->position.z,cam->position.w);
+    printf("offsetCenter : x%f y%f \n", cam->offsetCenterScreen[0], cam->offsetCenterScreen[1]);
+    printf("up : x%f y%f z%f w%f \n", cam->up.x,cam->up.y,cam->up.z,cam->up.w );
+    printf("target : x%f y%f z%f w%f \n", cam->target.x,cam->target.y,cam->target.z,cam->target.w );
+    printf("fovDeg :%f fovRad: %f cot: %f znear:%f zfar:%f \n",cam->fovDeg,cam->fovRad,cam->cot,cam->znear,cam->zfar);
     printf("[DEBUG CURRENT-CAMERA] <<< END }\n");
 }

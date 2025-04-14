@@ -44,34 +44,6 @@ perf_stats_t monitor_performance() {
 }
 
 
-void test_memory_limit_binary() {
-    size_t total_allocated = 0;
-    size_t current_size = 8*1024*1024;  // Commencer par 8MB
-    void** blocks = malloc(1000 * sizeof(void*));
-    int block_count = 0;
-    
-    printf("Test allocation mémoire avec recherche binaire...\n");
-    
-    while(current_size >= 1) {  // Jusqu'à 1 octet
-        void* block = malloc(current_size);
-        if(block) {
-            blocks[block_count++] = block;
-            total_allocated += current_size;
-            printf("Succès allocation de %lu octets (Total: %lu)\n", current_size, total_allocated);
-        } else {
-            current_size /= 2;  // Diviser par 2 si échec
-        }
-    }
-    
-    printf("\nTotal alloué: %lu octets\n", total_allocated);
-    printf("Mémoire système: %lu octets\n", 16*1024*1024 - total_allocated);
-    
-    for(int i = 0; i < block_count; i++) {
-        free(blocks[i]);
-    }
-    free(blocks);
-}
-
 
 void display_stats() {
     perf_stats_t stats = monitor_performance();

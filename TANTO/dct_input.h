@@ -48,7 +48,7 @@ typedef struct {
         int start;
     } just_released;
     
-} DCT_ControllerState;
+} dct_controllerState_t;
 
 // Initialise le système d'input
 // Retourne 1 si succès, 0 si échec
@@ -58,7 +58,7 @@ int dct_input_init(void);
 // port: numéro du port (0-3)
 // state: pointeur vers la structure à mettre à jour
 // Retourne 1 si succès, 0 si échec
-int dct_input_update(int port, DCT_ControllerState* state);
+int dct_input_update(int port, dct_controllerState_t* state);
 
 // Vérifie si un contrôleur est branché sur le port spécifié
 // port: numéro du port (0-3)

@@ -1,4 +1,11 @@
 {
+
+  "editor.insertSpaces": false,          // Désactive la conversion en espaces
+  "editor.tabSize": 4,                  // Définit la taille des tabulations
+  "[makefile]": {                       // Configuration spécifique pour les Makefiles
+      "editor.insertSpaces": false,
+      "editor.tabSize": 4
+  },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
   "C_Cpp_Runner.debuggerPath": "gdb",

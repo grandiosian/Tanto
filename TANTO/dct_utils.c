@@ -1,5 +1,68 @@
 #include "dct_utils.h"
 
+
+void quat_slerp(float result[4], const float q1[4], const float q2[4], float t) {
+    float cos_theta = q1[0] * q2[0] + q1[1] * q2[1] + q1[2] * q2[2] + q1[3] * q2[3];
+
+    // Si cos_theta < 0, on inverse un des quaternions pour prendre le chemin le plus court
+    if (cos_theta < 0.0f) {
+        cos_theta = -cos_theta;
+        result[0] = -q2[0];
+        result[1] = -q2[1];
+        result[2] = -q2[2];
+        result[3] = -q2[3];
+    } else {
+        result[0] = q2[0];
+        result[1] = q2[1];
+        result[2] = q2[2];
+        result[3] = q2[3];
+    }
+
+    // Interpolation linéaire si les quaternions sont très proches
+    if (cos_theta > 0.9995f) {
+        result[0] = q1[0] + t * (result[0] - q1[0]);
+        result[1] = q1[1] + t * (result[1] - q1[1]);
+        result[2] = q1[2] + t * (result[2] - q1[2]);
+        result[3] = q1[3] + t * (result[3] - q1[3]);
+
+        // Normaliser le résultat
+        float norm = sqrtf(result[0] * result[0] + result[1] * result[1] + result[2] * result[2] + result[3] * result[3]);
+        if (norm > 0.0f) {
+            result[0] /= norm;
+            result[1] /= norm;
+            result[2] /= norm;
+            result[3] /= norm;
+        }
+        return;
+    }
+
+    // Sinon, utiliser slerp
+    float theta = acosf(cos_theta);
+    float sin_theta = sinf(theta);
+
+    float w1 = sinf((1.0f - t) * theta) / sin_theta;
+    float w2 = sinf(t * theta) / sin_theta;
+
+    result[0] = q1[0] * w1 + result[0] * w2;
+    result[1] = q1[1] * w1 + result[1] * w2;
+    result[2] = q1[2] * w1 + result[2] * w2;
+    result[3] = q1[3] * w1 + result[3] * w2;
+}
+
+void transposeMatrix(float matrix[16]) {
+    float temp;
+
+    // Échanger les éléments hors diagonale
+    for (int i = 0; i < 4; i++) {
+        for (int j = i + 1; j < 4; j++) {
+            // Échanger matrix[i][j] et matrix[j][i]
+            temp = matrix[i * 4 + j];
+            matrix[i * 4 + j] = matrix[j * 4 + i];
+            matrix[j * 4 + i] = temp;
+        }
+    }
+}
+
 // Initialiser une nouvelle liste
 List* list_create() {
     List* list = (List*)malloc(sizeof(List));
@@ -163,7 +226,18 @@ void print_matrix(matrix_t mat) {
     printf("\n");
 }
 
-
+void print_matrix_f16(float m[16]) {
+    // Parcours des lignes de la matrice
+    for (int i = 0; i < 4; i++) {
+        // Parcours des colonnes de la matrice
+        for (int j = 0; j < 4; j++) {
+            // Affichage de l'élément à la position (i, j)
+            printf("%8.6f ", m[i * 4 + j]);
+        }
+        // Nouvelle ligne après chaque ligne de la matrice
+        printf("\n");
+    }
+}
 
 void debug_mat(matrix_t mat)
 {

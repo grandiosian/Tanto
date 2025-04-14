@@ -1,9 +1,17 @@
 #ifndef DCT_ENGINE_H
 #define DCT_ENGINE_H
 
+
+#define MAX_MODELS_SCENE 10
+#define MAX_MESHOP_SCENE 20
+#define MAX_MESHTR_SCENE 20
+#define MAX_GUIS_SCENE 10
+
 #include <kos.h>
 #include "dct_utils.h"
 #include "dct_model.h"
+#include "dct_input.h"
+#include "dct_camera.h"
 
 //---------------------------------------//
 //---------------------------------------//
@@ -12,114 +20,40 @@
 //---------------------------------------//
 
 
-typedef struct 
+typedef struct dct_scene
 {
-    char            name[30];
-    uint32_t        gameObjectsCount;
-    uint32_t        *ptrListGameObjects;
-    uint32_t        GUICount;   
-    uint32_t        *ptrListGUI;             // UI usually stay the same between scenes
-    maple_device_t  *controller1; 
-    maple_device_t  *controller2;
-    maple_device_t  *controller3;
-    maple_device_t  *controller4;
+    char                          name[30];
 
-    uint32_t        modelSceneCount;
-    dct_model_t     **ptrListModelScene;
+    dct_controllerState_t         pad1State;
+    dct_camera_t                  camera;
+
+    uint32_t                      ptrListGameObjects[MAX_MODELS_SCENE];
+    uint32_t                      ptrListGUI[MAX_GUIS_SCENE];             // UI usually stay the same between scenes
+    
+    dct_model_t                   *ptrListModelScene[MAX_MODELS_SCENE];
 
     // RENDERING PVR MODEL
     // LIST MESH OPAQUE
-    uint32_t        pvrMeshOPCount;
-    dct_mesh_t      **ptrListPvrMeshOP;
+    dct_mesh_t                    *ptrListPvrMeshOP[MAX_MESHOP_SCENE];
     // LIST MESH TRANSPARENT
-    uint32_t        pvrMeshTRCount;
-    dct_mesh_t      **ptrListPvrMeshTR;
+    dct_mesh_t                    *ptrListPvrMeshTR[MAX_MESHTR_SCENE];
 
     // RENDERING SPRITES
 
 
-} dct_scene;
-
-static dct_scene currentScene = {
-    .name = "scene courante",
-    .gameObjectsCount = 0,
-    .ptrListGameObjects = NULL,
-    .GUICount = 0,
-    .ptrListGUI = NULL,
-    .controller1 = NULL,
-    .controller2 = NULL,
-    .controller3 = NULL,
-    .controller4 = NULL,
-    .pvrMeshOPCount = 0,
-    .ptrListPvrMeshOP = NULL,
-    .pvrMeshTRCount = 0,
-    .ptrListPvrMeshTR = NULL
-
-};
-
-dct_scene* getCurrentScene()
-{
-    return &currentScene;
-}
-
-
-void createScene(dct_scene *sc)
-{
+} dct_scene_t;
 
 
 
 
 
-}
+void initSceneSystem(void);
 
-
-
-
-void drawScene(dct_scene *sc)
-{
-    pvr_wait_ready();
-
-    pvr_list_begin(PVR_LIST_OP_POLY);
-
-    // DRAW POLY MESH OPAQUE
-    for (int i_obj=0; i_obj<sc->pvrMeshOPCount; i_obj++)
-    {
-        drawMesh( sc->ptrListPvrMeshOP[i_obj] );
-    }
-
-
-
-    pvr_list_begin(PVR_LIST_TR_POLY);
-
-    // DRAW POLY TRANSPARENT
-     for (int i_obj=0; i_obj<sc->pvrMeshTRCount; i_obj++)
-    {
-        drawMesh( sc->ptrListPvrMeshTR[i_obj] );
-    }
-    pvr_scene_finish();
-
-}
-
-
-int initDcEngine()
-{
-    // Par défaut PAL RGB 565
-
-    if(pvr_init_defaults() == -1)
-    {
-        return -1;
-        printf("\n[ENGINE-KOS] Error : pvr has already been initialized. \n");
-    }
-
-    pvr_set_pal_format(PVR_PAL_RGB565);
-
-
-    return 1;
-}
-
-
-
-
+dct_scene_t* getCurrentScene();
+void initScene(dct_scene_t *sc);
+void updateScene(dct_scene_t *sc);
+void drawScene(dct_scene_t *sc);
+int initDcEngine();
 
 
 #endif
