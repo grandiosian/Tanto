@@ -60,6 +60,7 @@ Configurer le chemin de l'émulateur dans `SCRIPTS/MAKECDI/makeCdiAndRun.sh`:
 ```bash
 flycast_path="chemin/vers/votre/emulateur/dreamcast"
 ```
+Editer le fichier ~/.bashrc avec à la fin `source /opt/toolchains/dc/kos/environ.sh`
 
 ## Utilisation
 
@@ -71,7 +72,7 @@ flycast_path="chemin/vers/votre/emulateur/dreamcast"
 
 Compilation de l'ensemble : Executer simplement `make` à la racine /TANTO_ENGINE
 
-Compilation rapide : Exécuter `make clean`  puis `make` dans n'importe quel dossier de projet pour une compilation et un lancement automatique.
+Compilation rapide : Exécuter `make clean`  puis `make` dans n'importe quel dossier de projet pour une compilation et un lancement automatique dans l'émulateur flycast
 
 Si la démo a déja été compilé, exécuter `make run` pour éviter de recompiler le projet et juste lancer le programme dans l'emulateur (flycast de préférence)
 

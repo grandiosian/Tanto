@@ -199,7 +199,8 @@ int main(void) {
         
         //updateModel(padDreamcast); 
 
-        updateModel(suzanne);
+        //updateModel(suzanne);
+        updateModel_optimize(suzanne);
         
         if(activation_animation)
         {

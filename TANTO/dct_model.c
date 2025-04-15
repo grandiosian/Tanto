@@ -13,6 +13,10 @@
 
 #define MAX_BONE_DEPTH 10
 
+#define VERTEX_BATCH_SIZE 32
+#define MAX_CLIPPING_TRIANGLES 1024
+#define VERTEX_BUFFER_SIZE 512 
+
 static matrix_t matdbg = {0};
 
 void manipulate_path_buffer(const char* original_path, const char* texture_name, 
@@ -2938,6 +2942,159 @@ void updateModel(dct_model_t *model) {
 }
 
 
+
+void updateModel_optimize(dct_model_t *model) {
+    if(model->DEBUG_MODEL_VTX) { printf("\n\n---------------------------------------------\n---------------------------------------------\n"); printf("\n{ START >>> [UPDATE-MODEL] Model: %s\n", model->name);}
+    
+
+    dct_camera_t *currCam = getCurrentCamera(); 
+    matrix_t matrix_view;
+    matrix_t matrix_MVP;
+    matrix_t matrix_persp;
+
+    matrix_t matrix_modelTransform;
+
+    mat_identity();
+    mat_load(currCam->transform);
+    
+    mat_translate(model->position.x, model->position.y, model->position.z);
+    mat_rotate_y(model->rotation.y);
+    mat_rotate_x(model->rotation.x);
+    mat_rotate_z(model->rotation.z);
+    mat_scale(model->scale.x, model->scale.y, model->scale.z);
+    mat_store(&matrix_view);
+
+
+    // RESET
+    mat_identity();
+    // CAMERA TRANSFROM  Translate  lootAt 
+    mat_load(currCam->final);
+
+    // MODEL TRANSFORM 
+    mat_translate(model->position.x, model->position.y, model->position.z);
+    model->rotation.y = fmod(model->rotation.y,2*F_PI);
+    model->rotation.x = fmod(model->rotation.x,2*F_PI);
+    model->rotation.z = fmod(model->rotation.z, 2*F_PI);
+    mat_rotate_y(model->rotation.y);
+    mat_rotate_x(model->rotation.x);
+    mat_rotate_z(model->rotation.z);
+    mat_scale(model->scale.x, model->scale.y, model->scale.z);
+    
+    mat_store(&matrix_MVP);
+    
+    
+    pvr_vertex_t *v_test  =  (pvr_vertex_t*)memalign(32, sizeof(pvr_vertex_t));
+    pvr_vertex_t *v_test1 =  (pvr_vertex_t*)memalign(32, sizeof(pvr_vertex_t));
+    pvr_vertex_t *v_test2 =  (pvr_vertex_t*)memalign(32, sizeof(pvr_vertex_t));
+    
+    int indice_current_clipping_vtx = 0;
+    initClipTrianglesVtx(model);
+
+    for (int i_mesh = 0; i_mesh < model->meshesCount; i_mesh++) {
+        
+        memcpy(model->meshes[i_mesh].renderVtx, 
+               model->meshes[i_mesh].animatedVtx, 
+               model->meshes[i_mesh].sizeOfVtx);
+
+        for (int i_vtx = 0; i_vtx < model->meshes[i_mesh].vtxCount; i_vtx+=3) {
+
+            // on assume qu'il n'y a que des triangles qui sont dans les meshes pas de vertex Stripes ni de quad
+           
+            pvr_vertex_t *v = &model->meshes[i_mesh].renderVtx[i_vtx];
+            pvr_vertex_t *v1 = &model->meshes[i_mesh].renderVtx[i_vtx+1];
+            pvr_vertex_t *v2 = &model->meshes[i_mesh].renderVtx[i_vtx+2];
+
+            memcpy(v_test,   v, sizeof(pvr_vertex_t));
+            memcpy(v_test1, v1, sizeof(pvr_vertex_t));
+            memcpy(v_test2, v2, sizeof(pvr_vertex_t));
+
+            mat_load(&matrix_view);
+            mat_trans_single3_nodiv(v_test->x,v_test->y,v_test->z);
+            mat_trans_single3_nodiv(v_test1->x,v_test1->y,v_test1->z);
+            mat_trans_single3_nodiv(v_test2->x,v_test2->y,v_test2->z);
+
+
+            pvr_vertex_t *inputTriangle[3] = { v_test, v_test1, v_test2 };
+            pvr_vertex_t OutputTriangles[6] = {0};
+
+            float nearZ = 0.1f;
+
+            if(model->DEBUG_MODEL_VTX) {
+                printf("\n\n---------------------------------------------\n");
+                printf("\nSTART >>> DEBUG UPDATE VTX %d MESH VTX COUNT :%d \n",i_vtx, model->meshes[i_mesh].vtxCount);
+                
+                printf("Vertex %d before transform: x:%f y:%f z:%f argb:%x\n", 
+                       i_vtx, v->x, v->y, v->z, v->argb);
+                printf("Vertex %d before transform: x:%f y:%f z:%f argb:%x\n", 
+                       i_vtx+1, v1->x, v1->y, v1->z, v1->argb);
+                printf("Vertex %d before transform: x:%f y:%f z:%f argb:%x\n", 
+                       i_vtx+2, v2->x, v2->y, v2->z, v2->argb);
+            }
+            float x,y,z,w,x1,y1,z1,w1,x2,y2,z2,w2 = {0.0f};
+            
+            //model->meshes[i_mesh].currentClippingTrianglesCount = 0;
+            mat_load(&matrix_MVP);
+
+            x = v->x;
+            y = v->y;
+            z = v->z;
+            w = 1.0f;
+            // La transformation inclut déjà la perspective et les coordonnées écran
+            mat_trans_single4(x, y, z, w);
+
+            x1 = v1->x;
+            y1 = v1->y;
+            z1 = v1->z;
+            w1 = 1.0f;
+            // La transformation inclut déjà la perspective et les coordonnées écran
+            mat_trans_single4(x1, y1, z1, w1);
+
+            x2 = v2->x;
+            y2 = v2->y;
+            z2 = v2->z;
+            w2 = 1.0f;
+            // La transformation inclut déjà la perspective et les coordonnées écran
+            mat_trans_single4(x2, y2, z2, w2);
+
+            
+            v->x = x;
+            v->y = y;
+            v->z = w;  
+
+            v1->x = x1;
+            v1->y = y1;
+            v1->z = w1;
+
+            v2->x = x2;
+            v2->y = y2;
+            v2->z = w2;
+
+
+            if(model->DEBUG_MODEL_VTX) 
+            {
+                printf("indice_current_clipping_vtx : %d \n",indice_current_clipping_vtx);
+                printf("DEBUG UPDATE VTX %d <<< END \n",i_vtx);
+            }
+        }
+
+        if(model->meshes[i_mesh].shading)
+        {
+            vec3f_t lightDir = {0, -1, 0}; // Lumière venant du haut
+            calculateVertexLighting(&model->meshes[i_mesh], lightDir);
+        }
+    }
+
+    
+    free(v_test);
+    free(v_test1);
+    free(v_test2);
+    if(model->DEBUG_MODEL_VTX) printf("  [UPDATE-MODEL] <<< END }\n\n");
+}
+
+
+
+
+
 void renderMeshENV(dct_model_t *model, int i_mesh)
 {
 
@@ -3011,6 +3168,87 @@ void renderMeshSTD(dct_model_t *model, int i_mesh)
 
 
 }
+
+
+void renderMeshSTD_optimize(dct_model_t *model, int i_mesh)
+{
+    
+    if(model->meshes[i_mesh].currentCxtSelected >= 0)
+    {
+        //printf("textures cxt \n");
+        pvr_prim(&model->textures[model->meshes[i_mesh].currentCxtSelected].hdr ,sizeof(pvr_poly_hdr_t));
+        
+    }
+    if(model->meshes[i_mesh].currentCxtSelected == -1)
+    {
+        //printf("mesh hdr \n");
+        pvr_prim(&model->meshes[i_mesh].hdr, sizeof(pvr_poly_hdr_t));
+    }
+
+
+    int quadDraw = 0;
+    int vertices_in_poly = 0;
+    pvr_vertex_t *last_vertices[3] = {NULL, NULL, NULL};
+
+    static pvr_vertex_t vertex_buffer[VERTEX_BUFFER_SIZE] __attribute__((aligned(32)));
+    int buffer_count = 0;
+    
+    // Option 1: Rendu des triangles non clippés en batch
+    if (model->meshes[i_mesh].vtxCount > 0) {
+        // Aligner le nombre de vertices pour optimiser le transfert DMA
+        int aligned_count = model->meshes[i_mesh].vtxCount;
+        
+        // Remplir et envoyer par blocs
+        for (int i_vtx = 0; i_vtx < model->meshes[i_mesh].vtxCount; i_vtx += 3) {
+            
+            // // Vérifier si le triangle est derrière le near plane ou marqué pour clipping
+            // if (model->meshes[i_mesh].renderVtx[i_vtx].flags & PVR_CMD_VERTEX ||
+            //     model->meshes[i_mesh].renderVtx[i_vtx+1].flags & PVR_CMD_VERTEX ||
+            //     model->meshes[i_mesh].renderVtx[i_vtx+2].flags & PVR_CMD_VERTEX_EOL) {
+            //     continue;  // Triangle déjà traité par le clipping
+            // }
+            
+            // Copier les 3 vertices dans le buffer
+            memcpy(&vertex_buffer[buffer_count], &model->meshes[i_mesh].renderVtx[i_vtx], sizeof(pvr_vertex_t));
+            vertex_buffer[buffer_count].flags = PVR_CMD_VERTEX;
+            buffer_count++;
+            
+            memcpy(&vertex_buffer[buffer_count], &model->meshes[i_mesh].renderVtx[i_vtx+1], sizeof(pvr_vertex_t));
+            vertex_buffer[buffer_count].flags = PVR_CMD_VERTEX;
+            buffer_count++;
+            
+            // Dernier vertex de ce triangle
+            memcpy(&vertex_buffer[buffer_count], &model->meshes[i_mesh].renderVtx[i_vtx+2], sizeof(pvr_vertex_t));
+            vertex_buffer[buffer_count].flags = PVR_CMD_VERTEX_EOL;
+            buffer_count++;
+            
+            // Quand le buffer est plein, envoyer au PVR
+            if (buffer_count >= VERTEX_BUFFER_SIZE - 3) {
+                pvr_prim(vertex_buffer, sizeof(pvr_vertex_t) * buffer_count);
+                buffer_count = 0;
+            }
+        }
+        
+        // Envoyer les vertices restants
+        if (buffer_count > 0) {
+            pvr_prim(vertex_buffer, sizeof(pvr_vertex_t) * buffer_count);
+            buffer_count = 0;
+        }
+    }
+
+    
+    if(model->meshes[i_mesh].currentClippingTrianglesCount>0)
+    {
+        
+        for(int i = 0; i < model->meshes[i_mesh].currentClippingTrianglesCount; i++) {
+            pvr_prim(&model->meshes[i_mesh].clippingTrianglesVtx[i], sizeof(pvr_vertex_t));
+        }
+    }
+
+
+
+}
+
 
 
 void renderMeshPCM(dct_model_t *model, int i_mesh)
@@ -3128,7 +3366,7 @@ void renderModel(dct_model_t *model) {
         switch(model->meshes[i_mesh].type)
         {
             case MESH_STD_OP:
-                renderMeshSTD(model,i_mesh);
+                renderMeshSTD_optimize(model,i_mesh);
                 break;
 
             case MESH_PCM_OP:

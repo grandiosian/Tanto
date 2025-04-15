@@ -55,6 +55,9 @@ void test_memory_limit_binary();
 
 void debug_pvr_vtx(pvr_vertex_t *pvr, int size);
 
+void dct_vec3f_normalize(vec3f_t *v);
+float dct_vec3f_dot(const vec3f_t *v1, const vec3f_t *v2);
+
 float normalize_angle(float angle);
 
 float dct_tan(float angle);

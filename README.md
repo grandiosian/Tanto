@@ -64,6 +64,8 @@ Configure the emulator path in `SCRIPTS/MAKECDI/makeCdiAndRun.sh`:
 flycast_path="path/to/your/dreamcast/emulator"
 ```
 
+Edit file ~/.bashrc with `source /opt/toolchains/dc/kos/environ.sh`
+
 ## Usage
 
 1. Run `make` at the root

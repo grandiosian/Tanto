@@ -180,6 +180,39 @@ void debug_pvr_vtx(pvr_vertex_t *pvr, int size)
 
 }
 
+// Normalise un vecteur 3D en place
+// Modifie le vecteur d'entrée pour qu'il ait une longueur de 1
+void dct_vec3f_normalize(vec3f_t *v) {
+    if (!v) return;  // Protection contre les pointeurs NULL
+
+    float mag_squared = v->x * v->x + v->y * v->y + v->z * v->z;
+    
+    // Éviter la division par zéro et optimiser pour vecteurs déjà normalisés
+    if (mag_squared <= 0.0f || fabsf(mag_squared - 1.0f) < 0.00001f)
+        return;
+    
+    // Utiliser SH-4 FSRRA (Fast Square Root Reciprocal Approximation) si disponible
+    // ou utiliser 1/sqrt(x) standard
+    #ifdef _arch_sh4
+        float inv_magnitude;
+        asm("fsrra %0, %1" : "=f" (inv_magnitude) : "f" (mag_squared));
+    #else
+        float inv_magnitude = 1.0f / sqrtf(mag_squared);
+    #endif
+    
+    v->x *= inv_magnitude;
+    v->y *= inv_magnitude;
+    v->z *= inv_magnitude;
+}
+
+// Calcule le produit scalaire de deux vecteurs 3D
+// Retourne v1·v2 = v1.x*v2.x + v1.y*v2.y + v1.z*v2.z
+float dct_vec3f_dot(const vec3f_t *v1, const vec3f_t *v2) {
+    if (!v1 || !v2) return 0.0f;  // Protection contre les pointeurs NULL
+    
+    return v1->x * v2->x + v1->y * v2->y + v1->z * v2->z;
+}
+
 
 float normalize_angle(float angle) {
     // Ramène l'angle dans [-2π, 2π]

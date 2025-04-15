@@ -122,8 +122,13 @@ void setVertexColorToAllMesh(dct_mesh_t *mesh, uint32_t col);
 void setMeshTexture(dct_model_t *model, int indiceMeshTexture,const char *fileTextureName);
 void displayModelData(dct_model_t *model);
 void updateModel( dct_model_t *model );
+void updateModel_optimize(dct_model_t *model);
+int  clipTriangle_optimize(pvr_vertex_t* input[3], pvr_vertex_t* output, float nearZ, dct_model_t* model, dct_mesh_t* mesh) ;
+void calculateVertexLighting_optimized(dct_mesh_t* mesh, vec3f_t lightDir);
+
 void renderMeshENV(dct_model_t *model, int i_mesh);
 void renderMeshSTD(dct_model_t *model,int meshIndice);
+void renderMeshSTD_optimize(dct_model_t *model, int i_mesh);
 void renderMeshPCM(dct_model_t *model,int meshIndice);
 void renderMeshTPCM(dct_model_t *model, int i_mesh);
 void renderModel(dct_model_t *model);
